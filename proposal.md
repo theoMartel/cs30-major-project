@@ -14,5 +14,5 @@ This is what my project is
 ## Nice to Have List
 
 - thing one
-- thing two
+- thing twi
 
