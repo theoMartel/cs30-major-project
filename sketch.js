@@ -12,5 +12,13 @@ async function setup() {
 
 function draw() {
   background(220);
-  circle(mouseX,mouseY,10);
+  movePlayer();
+}
+
+
+
+function movePlayer() {
+  if (keyIsDown("w") || keyIsDown("W")) {
+    console.log("forward");
+  }
 }
