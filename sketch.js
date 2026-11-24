@@ -5,6 +5,8 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+let menuScreen;
+let gameState = "startScreen";
 
 let player = {
   x: 0,
@@ -25,6 +27,7 @@ async function setup() {
 
   player.y = rows*TILE_SIZE/2;
   player.x = cols*TILE_SIZE/2;
+  menuScreen = await loadImage("mainScreen.jpg");
 }
 
 function draw() {
@@ -32,6 +35,8 @@ function draw() {
   // movePlayer();
   drawTiles();
   drawPlayer();
+  movePlayer();
+  startScreen();
 }
 
 
@@ -100,5 +105,15 @@ function drawTiles() {
       }
       square(x * TILE_SIZE, y * TILE_SIZE,TILE_SIZE);
     }
+  }
+}
+
+function startScreen() {
+  if(gameState === "startScreen") {
+    image(menuScreen,0, 0, width, height);
+    fill("Yellow");
+    textSize(75);
+    textAlign(CENTER);
+    text("PLANET EXPLORER", width/2, 150);
   }
 }
