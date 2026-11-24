@@ -14,3 +14,6 @@ function draw() {
   background(220);
   circle(mouseX,mouseY,10);
 }
+
+
+console.log("Hello");
