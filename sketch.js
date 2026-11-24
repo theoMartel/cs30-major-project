@@ -22,3 +22,4 @@ function movePlayer() {
     console.log("forward");
   }
 }
+console.log("Hello");
