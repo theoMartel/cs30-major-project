@@ -11,23 +11,32 @@ let gameState = "";
 let player = {
   x: 0,
   y: 0,
-  size: 10,
+  size: 50,
 };
-let speed = 1;
-let tiles = [];
+let speed = 100;
+let levelOne = [];
+let screen = [];
 let cols;
 let rows;
-const TILE_SIZE = 50;
+let levelSize = 100;
+let groundTile;
+const TILE_SIZE = 150;
+let gridLocationX = -(levelSize/2* TILE_SIZE) ;
+let gridLocationY = -(levelSize/2 * TILE_SIZE) ;
+let playerLocationX = levelSize/2 ;
+let PlayerLocationY = levelSize/2;
 
 async function setup() {
   createCanvas(windowWidth, windowHeight);
-  cols = Math.ceil(width/TILE_SIZE);
-  rows = Math.ceil(height/TILE_SIZE);
-  tiles = generateTiles(cols,rows);
+  cols = levelSize;
+  rows = levelSize;
+  levelOne = generateTiles(levelSize,levelSize);
 
-  player.y = rows*TILE_SIZE/2;
-  player.x = cols*TILE_SIZE/2;
+  player.y = height/2;
+  player.x = width/2;
   menuScreen = await loadImage("mainScreen.jpg");
+  groundTile = await loadImage("groundTile.png");
+
 }
 
 function draw() {
@@ -36,35 +45,22 @@ function draw() {
 }
 
 
-function keyPressed() {
-  if (key === "s" || key === "S") {
-    let movedTiles = tiles;
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        movedTiles[y][x] = tiles[y+1][x];
-      }
-    }
-    tiles = movedTiles;
-  }
-}
+
 function movePlayer() {
-  if (keyPressed("w") || keyPressed("W")) {
-    let movedTiles = tiles;
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        movedTiles[y][x] = tiles[y+1][x];
-      }
+  if (keyIsDown("s")) {
+    if (levelOne[-1 * gridLocationY][-1 * gridLocationX] !== 1) {
+      gridLocationY -= speed;
+
     }
-    tiles = movedTiles;
   }
-  if (keyIsDown("a") || keyIsDown("A")) {
-    player.x -= speed;
+  if (keyIsDown("w")) {
+    gridLocationY += speed;
   }
-  if (keyIsDown("s") || keyIsDown("S")) {
-    player.y += speed;
+  if (keyIsDown("a")) {
+    gridLocationX += speed;
   }
-  if (keyIsDown("d") || keyIsDown("D")) {
-    player.x += speed;
+  if (keyIsDown("d")) {
+    gridLocationX -= speed;
   }
 }
 
@@ -93,13 +89,16 @@ function generateTiles(cols,rows) {
 function drawTiles() {
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
-      if (tiles[y][x] === 1) {
+      if (levelOne[y][x] === 1) {
         fill("black");
+        square(x * TILE_SIZE + gridLocationX, y * TILE_SIZE + gridLocationY,TILE_SIZE);
       }
       else {
         fill("white");
+        image(groundTile,x * TILE_SIZE + gridLocationX, y * TILE_SIZE + gridLocationY,TILE_SIZE,TILE_SIZE);
+        text(x,x * TILE_SIZE + gridLocationX, y * TILE_SIZE + gridLocationY);
       }
-      square(x * TILE_SIZE, y * TILE_SIZE,TILE_SIZE);
+      
     }
   }
 }
@@ -114,7 +113,7 @@ function startScreen() {
   }
   else {
     drawTiles();
-    drawPlayer();
     movePlayer();
+    drawPlayer();
   }
 }
