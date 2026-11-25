@@ -5,8 +5,14 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+let startButtonX;
+let startButtonY;
+let startButtonWidth;
+let startButtonHeight;
+
+let startFont;
 let menuScreen;
-let gameState = "";
+let gameState = "startScreen";
 
 let player = {
   x: 0,
@@ -28,6 +34,9 @@ async function setup() {
   player.y = rows*TILE_SIZE/2;
   player.x = cols*TILE_SIZE/2;
   menuScreen = await loadImage("mainScreen.jpg");
+
+  startFont = await loadFont("startFont.ttf");
+  
 }
 
 function draw() {
@@ -104,17 +113,52 @@ function drawTiles() {
   }
 }
 
+//Creates start screen and holds the functions to display start screen
 function startScreen() {
   if(gameState === "startScreen") {
     image(menuScreen,0, 0, width, height);
-    fill("Yellow");
-    textSize(75);
+    textFont(startFont);
+    fill('#8F1728');
+    textSize(95);
     textAlign(CENTER);
     text("PLANET EXPLORER", width/2, 150);
+
+    startButton();
+    startText();
   }
   else {
     drawTiles();
     drawPlayer();
     movePlayer();
   }
+}
+
+// Cretes the play button for start screen
+function startButton() {
+  startButtonX = width/2;
+  startButtonY = height/2;
+  startButtonWidth = 300;
+  startButtonHeight = 100;
+
+  rectMode(CENTER);
+  fill('#9B5CFF');
+  rect(startButtonX,startButtonY , startButtonWidth, startButtonHeight );
+}
+
+//Creates text for play Button
+function startText() {
+  let startTextX = width/2;
+  let startTextY = height/2 + 10;
+
+  textureMode(CENTER);
+  fill("Black");
+  textSize(35);
+  text("Press Play", startTextX, startTextY);
+}
+
+//Checks collsion with startbutton
+function pressPlay() {
+  let hit = false;
+
+  hit = collidePointRect(mouseX,mouseY)
 }
