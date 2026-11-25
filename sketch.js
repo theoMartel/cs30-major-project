@@ -6,7 +6,7 @@
 // - describe what you did to take this project "above and beyond"
 
 let menuScreen;
-let gameState = "startScreen";
+let gameState = "";
 
 let player = {
   x: 0,
@@ -32,10 +32,6 @@ async function setup() {
 
 function draw() {
   background(220);
-  // movePlayer();
-  drawTiles();
-  drawPlayer();
-  movePlayer();
   startScreen();
 }
 
@@ -115,5 +111,10 @@ function startScreen() {
     textSize(75);
     textAlign(CENTER);
     text("PLANET EXPLORER", width/2, 150);
+  }
+  else {
+    drawTiles();
+    drawPlayer();
+    movePlayer();
   }
 }
