@@ -23,7 +23,7 @@ let speed = 10;
 let levelOne = [];
 let cols;
 let rows;
-let levelSize = 100;
+let levelSize = 10;
 let groundTile;
 const TILE_SIZE = 150;
 let gridLocationX = -(levelSize/2* TILE_SIZE);
@@ -59,26 +59,30 @@ function draw() {
   fill("white");
   text(gridLocationX, 50,50);
   text(gridLocationY, 80,50);
-  text(gridLocationX - (player.x - TILE_SIZE/2), 50,80);
+  text(round( -1 * (gridLocationX - (player.x - TILE_SIZE/2)) / TILE_SIZE), 50,80);
 }
 
 
 
 function movePlayer() {
-  if (keyIsDown("s")) {
-    gridLocationY -= speed;
-  }
-  if (keyIsDown("w")) {
-    gridLocationY += speed;
-  }
-  if (keyIsDown("a")) {
-    gridLocationX += speed;
-  }
-  if (keyIsDown("d")) {
-    gridLocationX -= speed;
-  }
-  playerLocationX = Math.floor(gridLocationX/TILE_SIZE -playerLocationX);
+  playerLocationX = round( -1 * (gridLocationX - (player.x - TILE_SIZE/2)) / TILE_SIZE);
+  playerLocationY = round( -1 * (gridLocationY - (player.y - TILE_SIZE/2)) / TILE_SIZE);
+
+    if (keyIsDown("s") && levelOne[playerLocationY + 1][playerLocationX] !== 1) { // && dist(playerLocationX,playerLocationY,playerLocationX,levelOne[playerLocationY +1][playerLocationX]) <= player.size 
+      gridLocationY -= speed;
+    }
+    if (keyIsDown("w") && levelOne[playerLocationY - 1][playerLocationX] !== 1) {
+      gridLocationY += speed;
+    }
+    if (keyIsDown("a") && levelOne[playerLocationY][playerLocationX - 1] !== 1) {
+      gridLocationX += speed;
+    }
+    if (keyIsDown("d") && levelOne[playerLocationY][playerLocationX + 1] !== 1) {
+      gridLocationX -= speed;
+    }
+  
 }
+
 
 function drawPlayer() {
   fill("red");
