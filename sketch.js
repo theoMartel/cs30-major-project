@@ -12,25 +12,24 @@ let startButtonHeight;
 
 let startFont;
 let menuScreen;
-let gameState = "startScreen";
+let gameState = "";
 
 let player = {
   x: 0,
   y: 0,
   size: 50,
 };
-let speed = 100;
+let speed = 10;
 let levelOne = [];
-let screen = [];
 let cols;
 let rows;
 let levelSize = 100;
 let groundTile;
 const TILE_SIZE = 150;
-let gridLocationX = -(levelSize/2* TILE_SIZE) ;
-let gridLocationY = -(levelSize/2 * TILE_SIZE) ;
-let playerLocationX = levelSize/2 ;
-let PlayerLocationY = levelSize/2;
+let gridLocationX = -(levelSize/2* TILE_SIZE);
+let gridLocationY = -(levelSize/2 * TILE_SIZE);
+let playerLocationX;
+let playerLocationY;
 
 async function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -40,6 +39,12 @@ async function setup() {
 
   player.y = height/2;
   player.x = width/2;
+  gridLocationX += player.x - TILE_SIZE/2;
+  gridLocationY += player.y - TILE_SIZE/2;
+
+  playerLocationX = gridLocationX;
+  playerLocationY = gridLocationY;
+
   menuScreen = await loadImage("mainScreen.jpg");
 
   startFont = await loadFont("startFont.ttf");
@@ -51,16 +56,17 @@ async function setup() {
 function draw() {
   background(220);
   startScreen();
+  fill("white");
+  text(gridLocationX, 50,50);
+  text(gridLocationY, 80,50);
+  text(gridLocationX - (player.x - TILE_SIZE/2), 50,80);
 }
 
 
 
 function movePlayer() {
   if (keyIsDown("s")) {
-    if (levelOne[-1 * gridLocationY][-1 * gridLocationX] !== 1) {
-      gridLocationY -= speed;
-
-    }
+    gridLocationY -= speed;
   }
   if (keyIsDown("w")) {
     gridLocationY += speed;
@@ -71,6 +77,7 @@ function movePlayer() {
   if (keyIsDown("d")) {
     gridLocationX -= speed;
   }
+  playerLocationX = Math.floor(gridLocationX/TILE_SIZE -playerLocationX);
 }
 
 function drawPlayer() {
@@ -106,6 +113,7 @@ function drawTiles() {
         fill("white");
         image(groundTile,x * TILE_SIZE + gridLocationX, y * TILE_SIZE + gridLocationY,TILE_SIZE,TILE_SIZE);
         text(x,x * TILE_SIZE + gridLocationX, y * TILE_SIZE + gridLocationY);
+        text (y, x * TILE_SIZE + gridLocationX + 20, y * TILE_SIZE + gridLocationY);
       }
       
     }
@@ -159,5 +167,5 @@ function startText() {
 function pressPlay() {
   let hit = false;
 
-  hit = collidePointRect(mouseX,mouseY)
+  hit = collidePointRect(mouseX,mouseY);
 }
