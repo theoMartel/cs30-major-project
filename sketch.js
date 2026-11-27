@@ -23,13 +23,19 @@ let speed = 10;
 let levelOne = [];
 let cols;
 let rows;
-let levelSize = 10;
+let levelSize = 30;
 let groundTile;
 const TILE_SIZE = 150;
 let gridLocationX = -(levelSize/2* TILE_SIZE);
 let gridLocationY = -(levelSize/2 * TILE_SIZE);
 let playerLocationX;
 let playerLocationY;
+let wallLocation = {
+  south: false,
+  north: false,
+  east: false,
+  west: false,
+};
 
 async function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -59,29 +65,48 @@ function draw() {
   fill("white");
   text(gridLocationX, 50,50);
   text(gridLocationY, 80,50);
-  text(round( -1 * (gridLocationX - (player.x - TILE_SIZE/2)) / TILE_SIZE), 50,80);
+  text(round(playerLocationX,2), 50,80);
+  text(round(playerLocationY,2), 90, 80);
+  text(wallLocation.south, 100,100);
 }
 
 
 
 function movePlayer() {
-  playerLocationX = round( -1 * (gridLocationX - (player.x - TILE_SIZE/2)) / TILE_SIZE);
-  playerLocationY = round( -1 * (gridLocationY - (player.y - TILE_SIZE/2)) / TILE_SIZE);
+  playerLocationX =-1 * (gridLocationX - (player.x - TILE_SIZE/2)) / TILE_SIZE;
+  playerLocationY = -1 * (gridLocationY - (player.y - TILE_SIZE/2)) / TILE_SIZE;
 
-    if (keyIsDown("s") && levelOne[playerLocationY + 1][playerLocationX] !== 1) { // && dist(playerLocationX,playerLocationY,playerLocationX,levelOne[playerLocationY +1][playerLocationX]) <= player.size 
+  if (levelOne[round(playerLocationY) + 1][round(playerLocationX)] === 1) {
+    wallLocation.south = true;
+  }
+  else {
+    wallLocation.south = false;
+  }
+
+  if (keyIsDown("s")) {
+    if (wallLocation.south) {
+      let playerStep = Math.floor(playerLocationY + 0.5);
+      if (playerLocationY <= playerStep) {
+        gridLocationY -= speed;
+      }
+    }
+    else {
       gridLocationY -= speed;
     }
-    if (keyIsDown("w") && levelOne[playerLocationY - 1][playerLocationX] !== 1) {
-      gridLocationY += speed;
-    }
-    if (keyIsDown("a") && levelOne[playerLocationY][playerLocationX - 1] !== 1) {
-      gridLocationX += speed;
-    }
-    if (keyIsDown("d") && levelOne[playerLocationY][playerLocationX + 1] !== 1) {
-      gridLocationX -= speed;
-    }
-  
+  }
+  if (keyIsDown("w")) {
+
+    gridLocationY += speed;
+  }
+  if (keyIsDown("a")) {
+
+    gridLocationX += speed;
+  }
+  if (keyIsDown("d")) {
+    gridLocationX -= speed;
+  }
 }
+
 
 
 function drawPlayer() {
@@ -95,7 +120,7 @@ function generateTiles(cols,rows) {
     array.push([]);
     for (let x = 0; x < cols; x++) {
       let colour = random(100);
-      if (colour < 75) {
+      if (colour < 85) {
         array[y].push(0);
       }
       else {
